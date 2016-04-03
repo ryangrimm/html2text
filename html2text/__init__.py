@@ -586,6 +586,22 @@ class HTML2Text(HTMLParser.HTMLParser):
                     self.out("\n[/code]")
             self.p()
 
+        if tag == "iframe":
+            if 'src' in attrs:
+                src = attrs['src']
+                bits = src.split("https://www.youtube.com/embed/", 1)
+                if len(bits) == 2:
+                    vid = bits[1]
+
+                    width = attrs.get("width")
+                    height = attrs.get("height")
+
+                    if width is not None and height is not None:
+                        self.o("[![Youtube video](http://img.youtube.com/vi/{}/0.jpg)](http://www.youtube.com/watch?v={} ={}x{})".format(vid, vid, width, height))
+                    else:
+                        self.o("[![Youtube video](http://img.youtube.com/vi/{}/0.jpg)](http://www.youtube.com/watch?v={})".format(vid, vid))
+
+
     # TODO: Add docstring for these one letter functions
     def pbr(self):
         "Pretty print has a line break"
